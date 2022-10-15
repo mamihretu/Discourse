@@ -2,4 +2,27 @@ Discourse
 -----
 
 
-A chat application built with Django-channels and React
+A Fullstack chat application built with Django-channels and React
+
+
+Requirements
+-----
+
+
+
+
+
+Usage
+-----
+
+```
+
+  
+```
+
+TODO
+-----
+
+
+
+
