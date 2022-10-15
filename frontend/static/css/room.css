@@ -1,0 +1,111 @@
+body,html{
+		height: 100%;
+		margin: 0;
+    background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+	  font-family: 'Barlow Semi Condensed', sans-serif;
+	  line-height: 1.7;
+	  font-size: 13px;  
+	  box-sizing: border-box;
+  	padding: 0;      
+	}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 2px;
+  padding: 2px;
+  height: 100vh;
+}
+
+.nav-bar {
+  grid-area: 1 / 1 / 2 / 13;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 8px;
+}
+
+.setting {
+	float: right;
+	color: white;
+	margin: 1em;
+	background-color: rgba(0, 0, 0, 0.8);		
+} 
+
+
+.participants {
+  grid-area: 2/ 11 / 10 / 13;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 8px;
+
+}
+
+.participants-header {
+	padding: 1em;
+	color: white;  
+	text-align : center;
+	background-color: rgba(19, 73, 128, 0.5);
+}
+
+.person {
+	text-align:center;
+	color: white;
+	font-size: 2em;
+	font-family: sans-serif;
+	background-color: rgba(132, 202, 245, 0.1);
+	padding: 0.1em;
+	margin-top: 0.2em;
+	margin-left: 0.1em;
+	margin-right: 0.1em;
+	border-radius: 8px;
+
+
+}
+
+.global-message-area {
+	grid-area: 2 / 2 / 10 / 10;
+	background-color: rgba(0, 0, 0, 0.3);
+	border-radius: 4px;
+}
+
+.outgoing-message-area {
+	grid-area: 2 / 2 / 9 / 5;
+}
+
+.incoming-message-area {
+	grid-area: 2 / 7 / 9 / 10;
+}
+.my-message {
+	background-color: rgba(100, 100, 100, 0.5);
+	margin: 1em;
+	padding: 1em;
+	border-radius: 8px;
+	text-align: center; 
+}
+
+.other-message {
+	background-color: rgba(0, 0, 0, 0.5);
+	margin: 1em;
+	padding: 1em;
+	border-radius: 8px;
+	text-align: center; 
+}
+
+.message-input {
+	grid-area: 9 / 2 / 10 / 9;
+	margin: 1em;
+
+}
+
+
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+/*@media (max-width: 500px) {
+	  .grid-container {
+    grid-template-columns: auto;
+  }
+}*/
+
+
+
+
+
