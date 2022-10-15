@@ -125,3 +125,6 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
+
+LOGIN_URL = 'http://127.0.0.1:8000/login'
+LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/'

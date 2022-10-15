@@ -11,6 +11,9 @@ const JoinPage = () => {
     error : false
   });
 
+  const [user, setUser] = useState("");
+
+
   const navigate = useNavigate();
 
 
@@ -21,6 +24,13 @@ const JoinPage = () => {
     console.log("Just got changed to:", page.roomID);
 
   }
+
+
+ function loadUserNameFromInput(e){
+    setPage(e.target.value);
+    console.log("Just got changed to:", user);
+
+  }  
 
   function joinRoom(){
     console.log('joining room');
@@ -34,7 +44,16 @@ const JoinPage = () => {
                 <Typography component="h4" variant="h4">
                       Join a Room
                 </Typography> 
-            </Grid>   
+            </Grid>  
+            <Grid item xs={12} align="center">
+                <TextField 
+                  error={page.error}
+                  label="User name"
+                  helperText={page.error}
+                  variant="outlined"
+                  onChange = {loadRoomIDFromInput}
+                  />
+            </Grid>              
             <Grid item xs={12} align="center">
                 <TextField 
                   error={page.error}
@@ -45,6 +64,7 @@ const JoinPage = () => {
                   onChange = {loadRoomIDFromInput}
                   />
             </Grid> 
+
             <Grid item xs={12} align="center">
                 <Button variant="contained" color="primary" onClick={joinRoom} >
                     Enter Room
