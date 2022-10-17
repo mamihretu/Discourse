@@ -2,38 +2,54 @@ import React, {useState, useEffect} from "react";
 import { TextField, Button, Grid, Typography } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import "../../static/css/index.css"; 
+import getCookie from '../utils/Csrf'
 
 
 
 const JoinPage = () => {
+  const [user, setUser] = useState("");
+  const navigate = useNavigate();    
   const [page, setPage] = useState({
     roomID :"",
     error : false
   });
 
-  const [user, setUser] = useState("");
 
-
-  const navigate = useNavigate();
 
 
   function loadRoomIDFromInput(e){
     setPage((previousState) => {
           return {...previousState, roomID: e.target.value}
     } );
-    console.log("Just got changed to:", page.roomID);
-
   }
 
 
- function loadUserNameFromInput(e){
+  function loadUserNameFromInput(e){
     setPage(e.target.value);
-    console.log("Just got changed to:", user);
 
-  }  
+  } 
+
+  function logout() {
+    var csrftoken = getCookie('csrftoken');
+    const requestOptions = {
+        method: 'POST',
+        mode: 'same-origin',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+          }
+    } 
+    console.log("entered logout");
+    fetch('/rest-auth/logout/', requestOptions)
+    .then(response => {
+        if(response.ok){
+            navigate('/rest-auth/login/');
+        }});
+  }
+
 
   function joinRoom(){
-    console.log('joining room');
     navigate(`/room/${page.roomID}`);
   } 
 
@@ -44,16 +60,7 @@ const JoinPage = () => {
                 <Typography component="h4" variant="h4">
                       Join a Room
                 </Typography> 
-            </Grid>  
-            <Grid item xs={12} align="center">
-                <TextField 
-                  error={page.error}
-                  label="User name"
-                  helperText={page.error}
-                  variant="outlined"
-                  onChange = {loadRoomIDFromInput}
-                  />
-            </Grid>              
+            </Grid>               
             <Grid item xs={12} align="center">
                 <TextField 
                   error={page.error}
@@ -70,6 +77,11 @@ const JoinPage = () => {
                     Enter Room
                 </Button>
             </Grid>
+            <Grid item xs={12} align="center">
+                <Button variant="contained" color="secondary" onClick={logout} >
+                    Logout
+                </Button>
+            </Grid>            
         </Grid>
     </div>
     )

@@ -30,7 +30,14 @@ INSTALLED_APPS = [
     'chat',
     'frontend',
     'channels',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    
 ]
 
 MIDDLEWARE = [
@@ -126,5 +133,16 @@ CHANNEL_LAYERS = {
     }
 }
 
-LOGIN_URL = 'http://127.0.0.1:8000/login'
-LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/'
+
+SITE_ID = 1
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}

@@ -13,16 +13,28 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import getCookie from '../utils/Csrf'
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 const theme = createTheme();
 
 export default function Login() {
+      const [username, setUserName] = useState("");
+      const [password, setPassword] = useState("");
+      const navigate = useNavigate();
+
+      function loadUserName(event){
+        setUserName(event.target.value);
+      }
+
+      function loadPassword(event){
+        setPassword(event.target.value);
+      }      
+
 
       async function handleSubmit(event) {
           var csrftoken = getCookie('csrftoken');
-          const data = new FormData(event.currentTarget);
-          console.log("csrf", csrftoken);
           const requestOptions = {
             credentials: 'include',
             method: 'POST',
@@ -33,15 +45,17 @@ export default function Login() {
               'X-CSRFToken': csrftoken
             },
             body: JSON.stringify({
-                email: data.get('email'),
-                password: data.get('password')
+              username: username,
+              password: password
             })
           };
 
-
-
           try{
-              await fetch('/login', requestOptions);
+              const response = await fetch('/rest-auth/login/', requestOptions);
+              
+              if(response.ok){
+                navigate('/');
+              }
           }catch{
             alert("Try again");
           }
@@ -65,8 +79,9 @@ export default function Login() {
                 <Typography component="h1" variant="h5">
                   Sign in
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                <Box  noValidate sx={{ mt: 1 }}>
                   <TextField
+                    onChange={loadUserName}
                     margin="normal"
                     required
                     fullWidth
@@ -77,6 +92,7 @@ export default function Login() {
                     autoFocus
                   />
                   <TextField
+                    onChange={loadPassword}
                     margin="normal"
                     required
                     fullWidth
@@ -91,7 +107,7 @@ export default function Login() {
                     label="Remember me"
                   />
                   <Button
-                    type="submit"
+                    onClick={handleSubmit}
                     fullWidth
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}

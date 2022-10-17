@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Grid, Button, Typography, TextField } from '@mui/material';
-import "../../static/css/room.css";
-import SplitButton from './AppBar'; 
+import { Grid, Button, Typography, TextField } from '@mui/material'; 
 import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
-// import Message from './Message';
-import MessageList from './MessageList';
+import "../../static/css/room.css";
+import MessageList from '../components/MessageList';
+import SplitButton from '../components/NavBar';
 
 const Room = () => {
   const params = useParams();
@@ -93,13 +92,13 @@ const Room = () => {
       <div className="global-message-area"></div>      
           <div className="outgoing-message-area">
                 {messages.length > 0 ? (<MessageList messages={messages}/>):
-                                       (<h2>No messages yet</h2>) }
+                                       (<h2 style={{textAlign:'center'}}>No messages yet</h2>) }
                       
           </div> 
           <div className="incoming-message-area">
 
                 {messages.length > 0 ? (<MessageList messages={messages}/>):
-                                       (<h2>No messages yet</h2>) }
+                                       (<h2 style={{textAlign:'center'}}>No messages yet</h2>) }
           </div>
 
           <div className="message-input">
