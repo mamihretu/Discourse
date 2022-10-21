@@ -3,16 +3,26 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Grid, Button, Typography, TextField } from '@mui/material'; 
 import SendIcon from '@mui/icons-material/Send';
 import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
+import Chip from '@mui/material/Chip';
 import "../../static/css/room.css";
 import MessageList from '../components/MessageList';
-import SplitButton from '../components/NavBar';
+import LogoutIcon from '@mui/icons-material/Logout';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import HomeIcon from '@mui/icons-material/Home';
+import logout from '../utils/Logout';
+import PersonIcon from '@mui/icons-material/Person';
+import Fab from '@mui/material/Fab';
+
+
+
+
 
 const Room = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [username, setUserName] = useState('');
   const chatSocket = new WebSocket(
     'ws://' + 
     window.location.host + 
@@ -26,9 +36,15 @@ const Room = () => {
   useEffect(() => {
     chatSocket.onmessage = (e) =>{
       const data = JSON.parse(e.data);
-      const receivedMessage = data.message; 
+      const receivedMessage = data; 
       setMessages(messages => [...messages, receivedMessage]);
     }
+
+    fetch('/api/user')
+    .then(response => response.json())
+    .then(data => {
+      setUserName(data.username);
+    });
 
     
   }, [])
@@ -36,7 +52,6 @@ const Room = () => {
 
   function loadMessageFromInput(e){
     setMessage(e.target.value);
-    console.log("Just got changed to:", message);
 
   }  
 
@@ -44,7 +59,7 @@ const Room = () => {
   function sendMessage() {
     chatSocket.send(JSON.stringify({
                     'message': message,
-                    'username': params.roomID,
+                    'username': username,
                 }));
   }
 
@@ -65,58 +80,58 @@ const Room = () => {
     <div className="grid-container">
       <div className="nav-bar">
         <div className="setting"> 
-            <SplitButton/>
+            <Button variant="contained" endIcon={<LogoutIcon />} onClick={logout} >
+              Logout
+            </Button>           
         </div>
       </div> 
 
       <div className="participants">
-          <h2 className= "participants-header"> Participants</h2>
-          <Stack direction="row" >
-            <Avatar alt="Remy Sharp" src="/static/images/rhino-art.PNG" />
-            <div className="person"> User Name</div>
-          </Stack>
-          <Stack direction="row" >
-            <Avatar alt="Remy Sharp" src="/static/images/rhino-art.PNG" />
-            <div className="person"> User Name</div>
-          </Stack>
-          <Stack direction="row" >
-            <Avatar alt="Remy Sharp" src="/static/images/rhino-art.PNG" />
-            <div className="person"> User Name</div>
-          </Stack>
-          <Stack direction="row" >
-            <Avatar alt="Remy Sharp" src="/static/images/rhino-art.PNG" />
-            <div className="person"> User Name</div>
-          </Stack>                    
+          <div className= "participants-header"> Participants</div>
+            <div className="person">
+                Person
+            </div>
+            <div className="person">
+                Person
+            </div>                                
+                   
       </div>
 
-      <div className="global-message-area"></div>      
-          <div className="outgoing-message-area">
-                {messages.length > 0 ? (<MessageList messages={messages}/>):
-                                       (<h2 style={{textAlign:'center'}}>No messages yet</h2>) }
-                      
-          </div> 
-          <div className="incoming-message-area">
+      <div className="global-message-area">
+      </div>    
 
-                {messages.length > 0 ? (<MessageList messages={messages}/>):
-                                       (<h2 style={{textAlign:'center'}}>No messages yet</h2>) }
-          </div>
+      <div className="outgoing-message-area">
+            {messages.length > 0 ? (<MessageList messages={messages} type="outgoing" username={username}/>):
+                                   (<h2 style={{textAlign:'center'}}>No messages yet</h2>) }
+                  
+      </div> 
 
-          <div className="message-input">
-              <Stack direction="row" spacing={2}>
-                <TextField fullWidth label="Enter Message" id="fullWidth" 
-                onChange={loadMessageFromInput} className="message-input-field"/>
-                <Button variant="contained" endIcon={<SendIcon />} onClick={sendMessage}>
-                  Send
-                </Button>
-              </Stack>  
-          </div>               
-    </div>
+      <div className="incoming-message-area">
+
+            {messages.length > 0 ? (<MessageList messages={messages} type="incoming" username={username} />):
+                                   (<h2 style={{textAlign:'center'}}>No messages yet</h2>) }
+      </div>
+
+      <div className="message-input">
+          <Stack direction="row" spacing={2}>
+            <TextField fullWidth label="Enter Message" id="fullWidth" 
+            onChange={loadMessageFromInput} className="message-input-field"/>
+            <Button variant="contained" endIcon={<SendIcon />} onClick={sendMessage}>
+              Send
+            </Button>
+          </Stack>  
+      </div>               
+          
+
+
+  </div>     
 
     );
 
 }
 
 export default Room;
+
 
 
 
