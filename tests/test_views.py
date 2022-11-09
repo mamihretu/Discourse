@@ -36,7 +36,7 @@ class Hosttest(LiveServerTestCase):
         time.sleep(20)
 
         self.selenium.get('http://127.0.0.1:8000/rest-auth/login')
-        assert "Doom" in driver.title
+        assert "Discourse" in driver.title
 
 
 
