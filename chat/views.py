@@ -2,18 +2,24 @@ from django.contrib.auth import get_user_model
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from django.http import JsonResponse
-
-from chat.models import Chat, Contact
-from chat.utils import get_user_contact
-# from .serializers import ChatSerializer
+from rest_framework.views import APIView
+from rest_framework.generics import CreateAPIView,ListAPIView,RetrieveAPIView,DestroyAPIView,UpdateAPIView,ListCreateAPIView
+from .models import Chat, Message
+from .serializers import ChatSerializer, MessageSerializer
 
 UserModel = get_user_model()
 
 
-def user(request):
-	print(request.user.username)
+class Setup(ListAPIView):
+	queryset = Chat.objects.all()
+	serializer_class = ChatSerializer
+
+
+def username(request):
 	response = {'username': request.user.username}
-	return JsonResponse(response, status=status.HTTP_200_OK)
+	return JsonResponse(response, status = status.HTTP_200_OK) 
+
+
 
 
 

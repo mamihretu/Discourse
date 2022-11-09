@@ -5,5 +5,6 @@ from . import views
 app_name = 'chat'
 
 urlpatterns = [
-	path('user', views.user)
+	path('setup1', views.username),
+	path('setup2', views.Setup.as_view())
 ]

@@ -1,0 +1,51 @@
+version: '3'
+
+volumes:
+  production_postgres_data: {}
+  production_postgres_data_backups: {}
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./Docker/production/django/Dockerfile
+    image: Discourse_production_django
+    platform: linux/x86_64
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - ./.envs/.production/.django
+      - ./.envs/.production/.postgres
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./Docker/production/postgres/Dockerfile
+    image: Discourse_production_postgres
+    volumes:
+      - production_postgres_data:/var/lib/postgresql/data:Z
+      - production_postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.production/.postgres
+
+  redis:
+    image: redis:6
+
+
+
+  # nginx:
+  #   build:
+  #     context: .
+  #     dockerfile: ./Docker/production/traefik/Dockerfile
+  #   image: Discourse_production_traefik
+  #   depends_on:
+  #     - django
+  #   volumes:
+  #     - production_nginx:/etc/nginx/acme:z
+  #   ports:
+  #     - "0.0.0.0:80:80"
+  #     - "0.0.0.0:443:443"
+
+

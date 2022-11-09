@@ -5,6 +5,7 @@ import "../../static/css/message.css";
 
 const MessageList = (props) => {
 	const messageArray = props.messages;
+	console.log(messageArray);
 	const reducedArray = messageArray.length > 10 ? messageArray.slice(-10) : messageArray; 
 	const receivedMessages = reducedArray.filter(receivedFilter);
 	const sentMessages = reducedArray.filter(sentFilter);
@@ -26,11 +27,11 @@ const MessageList = (props) => {
 		return (
 				<>
 			      {props.type === "incoming" ? (receivedMessages.map((message, id) => (
-			        <div key={id} className="incoming"> {message.message} </div> 
+			        <div key={id} className="incoming"> {message.content} </div> 
 			      )))
 			      :
 				  ( sentMessages.map((message, id) => (
-				      <div key={id} className="outgoing"> {message.message} </div> 
+				      <div key={id} className="outgoing"> {message.content} </div> 
 				   )))}	
 				</>			
 			);

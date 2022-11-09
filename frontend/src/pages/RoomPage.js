@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import "../../static/css/room.css";
 import MessageList from '../components/MessageList';
+import ParticipantList from '../components/ParticipantList';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import HomeIcon from '@mui/icons-material/Home';
@@ -20,32 +21,40 @@ import Fab from '@mui/material/Fab';
 const Room = () => {
   const params = useParams();
   const navigate = useNavigate();
+  const [username, setUserName] = useState('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const [username, setUserName] = useState('');
-  const chatSocket = new WebSocket(
-    'ws://' + 
-    window.location.host + 
-    '/ws/room/' + 
-    params.roomID +
-    '/'
-    );  
+  const [participants, setParticipants] = useState([]);
+  const chatSocket = new WebSocket('ws://' + 
+                                    window.location.host + 
+                                    '/ws/room/' + 
+                                    params.roomID + '/'
+                                    );  
+
+  chatSocket.onmessage = (e) =>{
+    const data = JSON.parse(e.data);
+    const receivedMessage = data; 
+    setMessages(messages => [...messages, receivedMessage]);
+}
 
 
   
   useEffect(() => {
-    chatSocket.onmessage = (e) =>{
-      const data = JSON.parse(e.data);
-      const receivedMessage = data; 
-      setMessages(messages => [...messages, receivedMessage]);
-    }
 
-    fetch('/api/user')
+   fetch('/chat/setup1')
     .then(response => response.json())
     .then(data => {
+      console.log(data);
       setUserName(data.username);
     });
 
+
+    fetch('/chat/setup2')
+    .then(response => response.json())
+    .then(data => {
+      setParticipants(participants => [...participants, ...data[0].participants]);
+      setMessages(messages => [...messages, ...data[0].messages]);
+    });
     
   }, [])
 
@@ -88,17 +97,10 @@ const Room = () => {
 
       <div className="participants">
           <div className= "participants-header"> Participants</div>
-            <div className="person">
-                Person
-            </div>
-            <div className="person">
-                Person
-            </div>                                
-                   
+          <ParticipantList participants={participants}/>                    
       </div>
 
-      <div className="global-message-area">
-      </div>    
+      <div className="global-message-area"></div>    
 
       <div className="outgoing-message-area">
             {messages.length > 0 ? (<MessageList messages={messages} type="outgoing" username={username}/>):
