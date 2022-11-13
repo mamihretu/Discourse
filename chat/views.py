@@ -15,11 +15,6 @@ class Setup(ListAPIView):
 	serializer_class = ChatSerializer
 
 
-def username(request):
-	response = {'username': request.user.username}
-	return JsonResponse(response, status = status.HTTP_200_OK) 
-
-
 
 
 

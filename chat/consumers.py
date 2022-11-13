@@ -1,9 +1,8 @@
-
-
-
-
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+from .models import Chat, Message
+from .utils import get_last_10_messages, get_current_chat
+
 
 
 class ChatRoomConsumer(AsyncWebsocketConsumer):
@@ -17,20 +16,10 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
 			self.channel_name
 			)
 
-		await self.accept() 
+		await self.accept()
 
-	async def tester_message(self, event):
-		"""beginning point for channels when message
-		   is received internally. Message is sent to browser
-		   """
-
-		test_text = event['test_text']
-		await self.send(text_data = json.dumps({'test_text': test_text}))
 
 	    		
-
-
-
 	async def disconnect(self, close_code):
 		"""remove channel from group"""
 		await self.channel_layer.group_discard(
@@ -43,8 +32,6 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
 		text_data_json = json.loads(text_data)
 		message = text_data_json['message']
 		username = text_data_json['username']
-
-
 
 		# Send messaga to all channels added to current
 		# group, message is sent internally within server

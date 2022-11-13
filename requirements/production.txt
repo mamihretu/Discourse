@@ -1,0 +1,9 @@
+-r base.txt
+
+gunicorn==20.1.0
+psycopg2==2.9.5
+
+# Django
+# ------------------------------------------------------------------------------
+django-storages[boto3]==1.13.1
+django-anymail[mailgun]==8.6
